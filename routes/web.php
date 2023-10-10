@@ -1,7 +1,6 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\ProjectController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,11 +15,11 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('auth/login');
+    return view('welcome');
 });
 
 Route::get('/dashboard', function () {
-    return redirect()->route('project.index');
+    return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
@@ -29,22 +28,4 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::controller(ProjectController::class)->group(function () {
-    Route::get('/index', 'index' )->name('project.index');
-});
-
-
 require __DIR__.'/auth.php';
-
-
-Route::controller(ProjectController::class)->group(function () {
-    Route::get('/projects', 'index')->name('project.index');
-    Route::get('/project/view/{project_id}', 'view')->name('project.view');
-    Route::get('/add-project', 'create')->name('project.create'); //Cria
-    Route::post('/add-project', 'store')->name('project.store');
-    Route::get('/project/edit/{project_id}', 'edit')->name('project.edit'); //Edita
-    Route::put('/project/edit/{project_id}', 'update')->name('project.update'); //Atualiza
-    Route::delete('/project/delete/{project_id}', 'destroy')->name('project.delete'); //Deleta
-    Route::get('/download-pdf/{filename}', 'downloadPDF')->name('download.pdf');
-    Route::get('project/download/{project_id}', 'downloadProjectFiles')->name('project.download');
-});
